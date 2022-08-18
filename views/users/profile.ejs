@@ -1,0 +1,68 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2 mt-3">
+      <%- include('../partials/_side-bar') %>
+    </div>
+    <div class="col-sm-7 offset-2">
+      <div class="container-image">
+        <%_ if (user.image.data) { -%>
+          <img src="/users/<%= user._id %>/show-image" alt="profile image" class="rounded-circle image" width="400" height="300">
+        <%_ } else { -%>
+          <img src="/images/img_avatar.png" alt="image avatar" class="rounded-circle image" width="400" height="300">
+        <%_ } -%>
+      </div>
+      
+      <form action="/users/<%= user._id%>/profile-edit" method="post" enctype="multipart/form-data" class="my-3" id="form-image">
+        <input type="file" name="image" id="input-file" style="display: none;">
+        <a href="" class="btn btn-primary" id="edit-button" style="width: 300px;">Edit image</a>
+        <button type="submit" class="btn btn-primary" id="upload-button">Upload</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+profile image
+<style>
+  .col-sm-7 {
+    margin-top: 70px;
+    margin-bottom: 70px;
+  }
+</style>
+<script>
+$(function() {
+  const inputFile = $('#input-file'),
+  editImage = $('#edit-button'),
+  upload = $('#upload-button'),
+  imgs = $('.image'),
+  topic = $('#topics');
+
+  editImage.on('click', function(evt) {
+    evt.preventDefault()
+    inputFile.click()
+  })
+
+  //change event of file input
+  inputFile.on('change', function(evt) {
+    const file = evt.target.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      $(`<p class='text-danger'>invalid file</p>`).insertAfter('.buttons');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {imgs.attr('src', evt.target.result)};
+    reader.readAsDataURL(file);
+  })
+
+  upload.on('click', function() {
+    $(this)
+    .text('Loading...')
+    .prepend("<span class='spinner-border spinner-border-sm'><span>")
+    .prop('disabled', true);
+
+    $('#form-image').submit();
+  })
+})
+</script>

@@ -1,0 +1,46 @@
+
+<%- include('../partials/_notification') %>
+<div class="container mt-5">
+<div class="row">
+  <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+    <form action="/users/login" method="post" class="jumbotron bg-white py-2">
+      <h2 class="text-center mb-5">Login</h2>
+
+      <label for="email" class="form-control-label font-weight-bold">Email</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+        <input type="text" class="form-control" id="email" name="email" placeholder="Email Address">
+      </div>
+
+      <label for="pswd" class="form-control-label font-weight-bold">Password</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <i class="fas fa-lock"></i>
+          </div>
+        </div>
+        <input type="password" class="form-control" id="pswd" name="password" placeholder="Your password">
+      </div>
+      <button class="btn btn-success btn-block">Login</button>
+      <p class="mt-2">Don't have an account? 
+        <a href="/users/register" class="text-success font-weight-bold">Register</a>
+        <a href="/users/forget-password" class="float-right">Forgot Password</a>
+      </p>
+    </form>
+  </div>
+</div>
+</div>
+
+<%- contentFor('title') %>
+Login
+
+<style>
+  .col-sm-8 {
+    margin-top: 20px;
+    margin-bottom: 70px;
+  }
+</style>

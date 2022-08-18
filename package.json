@@ -1,0 +1,66 @@
+{
+  "name": "learninglog",
+  "version": "0.0.0",
+  "engines": {
+    "node": "14.17.6"
+  },
+  "private": true,
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "server/*",
+      "public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
+  },
+  "scripts": {
+    "transpile": "babel ./server -d dist-server",
+    "clean": "rimraf dist-server",
+    "build": "npm-run-all clean transpile",
+    "server": "node ./dist-server/bin/www.js",
+    "dev": "npm-run-all build server",
+    "watch:dev": "nodemon",
+    "prod": "npm-run-all build server",
+    "start": "npm run prod"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "axios": "^0.22.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.1",
+    "cookie-parser": "~1.4.4",
+    "core-js": "^3.18.0",
+    "debug": "~2.6.9",
+    "dotenv": "^10.0.0",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.13.0",
+    "http-errors": "~1.6.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.0.7",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.3",
+    "nodemailer": "^6.6.5",
+    "npm-run-all": "^4.1.5",
+    "passport": "^0.5.0",
+    "passport-local-mongoose": "^6.1.0",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "nodemon": "^2.0.13"
+  }
+}

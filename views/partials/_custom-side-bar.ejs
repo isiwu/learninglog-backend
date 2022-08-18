@@ -1,0 +1,31 @@
+
+<ul class="nav flex-column py-0 my-5">
+    <li class="nav-item side-nav">
+    <a href="/users/<%= user._id%>/topics-account" class="nav-link text-dark font-weight-bold">Account</a>
+    </li>
+    <li class="nav-item side-nav">
+      <a href="/users/<%= user._id %>" class="nav-link text-dark font-weight-bold" id="topics">Topics</a>
+    </li>
+    <li class="nav-item side-nav">
+    <a href="/users/change-password" class="nav-link text-dark font-weight-bold">Change password</a>
+    </li>
+  </ul>
+
+  <style>
+    ul.nav {
+      border: 1px solid black;
+    }
+    li.side-nav a {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border-bottom: 1px solid black;
+  }
+
+  li.side-nav:last-child a {
+    border-bottom: none;
+  }
+
+  li.side-nav a.active {
+    border-left: 3px solid blue;
+  }
+  </style>

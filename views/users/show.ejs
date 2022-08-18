@@ -1,0 +1,56 @@
+
+<%- include('../partials/_notification') %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <%- include('../partials/_custom-side-bar') %>
+    </div>
+    <div class="col-9 col-sm-7 offset-sm-1">
+    <%_ if (topics.length) { -%>
+      <table class="table mt-5">
+        <tr>
+          <th>S/N</th>
+          <th>Topics</th>
+          <th>Status</th>
+          <th>Entries</th>
+          <th></th>
+        </tr>
+      <%_ topics.forEach((topic,index) => { -%>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><a href="/topics/<%= topic._id%>"><%= topic.title -%></a></td>
+          <%_ if (topic.public) { -%>
+          <td>public</td>
+          <%_ } else { -%>
+          <td>private</td>
+          <%_ } -%>
+          <td class="pl-4"><span class="badge badge-success"><%= topic.entries.length %></span></td>
+          <td><a href="/topics/<%= topic._id%>/delete?_method=DELETE" onclick="return confirm('Deleting this topic will delete all the associated entries. Do you want to continue?')"><i class="fas fa-trash-alt"></i></a></td>
+        </tr>
+      <% }) %>
+    </table>
+    <% } else { %>
+    <p class="text-center mt-5 font-weight-bold">You have not created any topic yet!</p>
+    <p class="text-center">Click the Add Topic button to create topic and start saving your entries</p>
+    <% } %>
+    <p class="text-right mt-5"><a href="/topics/new" class="btn btn-primary">Add Topic</a></p>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+show
+<style>
+  th {
+    letter-spacing: .2rem;
+    font-size: 1.2rem;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  td {
+    font-size: 1.2rem;
+  }
+  
+  td a {
+    font-size: 1.5rem;
+  }
+</style>

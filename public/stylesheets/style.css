@@ -1,0 +1,12 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.home {
+  background: url('../images/bg.jpg') no-repeat center;
+  background-size: cover;
+}

@@ -1,0 +1,5 @@
+node_modules/
+seed/
+dist-server/
+uploads/
+.env

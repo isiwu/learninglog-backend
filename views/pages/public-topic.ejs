@@ -1,0 +1,32 @@
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-8 offset-2 mt-4">
+        <h1 class="text-center display-4 text-white">Topic: <%= topic.title%></h1>
+        <h2 class="display-6 text-center text-white">Entries:</h2>
+        <%_ if (topic.entries.length) { -%>
+        <%_ topic.entries.forEach(entry => { -%>
+        <div class="card mb-4">
+          <div class="card-header text-white clearfix text-center"><%= entry.createdAt.toDateString() %> <span class="float-right"><%= entry.createdAt.toLocaleTimeString() %></span></div>
+          <div class="card-body"><%= entry.body %></div>
+        </div>
+        <% }) %>
+        <% } else { %>
+        <p class="text-center lead">No entry for <%= topic.title %> yet.</p>
+        <% } %>
+    </div>
+  </div>
+</div>
+
+<%- contentFor('title') %>
+<%= topic.title%>: entries
+
+<style>
+  h1 {
+    text-decoration: underline;
+  }
+  .card-header {
+    background-color: #9dc7ee;
+  }
+</style>

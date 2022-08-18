@@ -1,0 +1,41 @@
+
+<%- include('../partials/_notification') %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <%- include('../partials/_side-bar') %>
+    </div>
+    <div class="col-md-5 offset-sm-2">
+      <form action="/topics/new" method="post" class="jumbotron bg-white shadow-sm pt-2 pb-4">
+        <h3 class="text-center">New Topic</h3>
+        <div class="form-group">
+          <label for="topic" class="font-weight-bold">Topic</label>
+          <input type="text" class="form-control" id="topic" placeholder="New Topic" name="title" value="<%= topic.title %>">
+        </div>
+        <div class="form-check">
+          <input type="checkbox" name="public" id="public" class="form-check-input" value="true">
+          <label for="public" class="form-check-label font-weight-bold" checked>This topic will accessible by others through your URL.</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" name="public" id="private" class="form-check-input" value="false">
+          <label for="private" class="form-check-label font-weight-bold">This topic will not accessible by others.</label>
+        </div>
+        <button class="btn btn-success mt-3">Add Topic</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+New Topic
+<style>
+  .col-md-5 {
+    margin-top: 90px;
+    margin-bottom: 150px;
+  }
+</style>
+<script>
+  $('.form-check-input').on('click', function(evt) {
+    $('.form-check-input').prop('checked', false);
+    $(evt.target).prop('checked', true);
+  })
+</script>

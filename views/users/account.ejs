@@ -1,0 +1,36 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <%- include('../partials/_custom-side-bar') %>
+    </div>
+    <div class="col-sm-7 offset-2">
+      <table class="table">
+        <tr>
+          <th>Topics</th>
+          <td><%= topics.length %></td>
+        </tr>
+        <tr>
+          <th>Public Topics</th>
+          <td><%= pubTopics.length %></td>
+        </tr>
+        <tr>
+          <th>Private Topics</th>
+          <td><%= privTopics.length %></td>
+        </tr>
+        <tr>
+          <th>Public Topics URL</th>
+          <td><%= user.pubTopicURL%></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+Topic account
+<style>
+  .col-sm-7 {
+    margin-top: 90px;
+    margin-bottom: 220px;
+  }
+</style>

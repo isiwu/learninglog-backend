@@ -1,0 +1,21 @@
+
+<%- include('../partials/_notification') %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <%- include('../partials/_side-bar') %>
+    </div>
+    <div class="col-sm-7 offset-sm-2 my-5">
+     <div class="text-center display-2 text-white">Edit Entry</div>
+     <form action="/topics/<%= topic._id %>/entries/<%= entry._id%>/edit?_method=PUT" method="post">
+       <label for="entry" class="font-weight-bold text-white">Entry</label>
+       <textarea name="body" id="entry" cols="30" rows="10" class="form-control">
+         <%= entry.body %>
+       </textarea>
+       <button class="btn btn-success mt-3 mb-4">Submit</button>
+     </form>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+Edit Entry

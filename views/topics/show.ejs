@@ -1,0 +1,41 @@
+
+<%- include('../partials/_notification') %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <%- include('../partials/_side-bar') %>
+    </div>
+  <div class="col-sm-9 mt-5">
+    <h1 class="text-center display-5 text-white">Topic: <%= topic.title%></h1>
+    <p class="text-right"><a href="/topics/<%= topic._id%>/entries/new" class="btn btn-primary">Add Entry</a></p>
+    <h2 class="display-5 text-center text-white">Entries</h2>
+    <%_ if (topic.entries.length) { -%>
+      <%_ topic.entries.forEach(entry => { -%>
+        <div class="card mb-3">
+          <div class="card-header text-center text-white clearfix"><%= entry.createdAt.toDateString() %> <span class="float-right"><%= entry.createdAt.toLocaleTimeString() %></span></div>
+          <div class="card-body">
+            <%_ entry.paragraphs.forEach(paragraph => { -%>
+              <p style="font-family: Arial, Helvetica, sans-serif; font-size: medium;"><%= paragraph %></p>
+            <%_ }) -%>
+          </div>
+          <div class="card-footer text-center">
+            <a href="/topics/<%= topic._id%>/entries/<%= entry._id%>/edit" class="text-decoration-none">Edit</a> |
+            <a href="/topics/<%= topic._id%>/entries/<%= entry._id%>/delete?_method=DELETE" class="text-decoration-none">Delete</a>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center lead text-light">No entry for <%= topic.title %> yet. Just click the add entry button to make some entry</p>
+    <% } %>
+  </div>
+  </div>
+</div>
+
+<%- contentFor('title') %>
+Topic:<%= topic.title%>
+
+<style>
+  .card-header {
+    background-color: #9dc7ee;
+  }
+</style>

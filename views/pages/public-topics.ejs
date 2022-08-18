@@ -1,0 +1,25 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-7 offset-3">
+      <%_ if (topics.length) { -%>
+      <table class="table">
+        <tr>
+          <th>S/N</th>
+          <th>Topics</th>
+        </tr>
+        <%_ topics.forEach((topic, index) => { -%>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><a href="/<%= author.username %>/topics/<%= topic._id %>"><%= topic.title %></a></td>
+        </tr>
+        <%_ }) -%>
+      </table>
+      <%_ } else { -%>
+        <p class="text-center font-weight-bold">The author has no topic yet!</p>
+      <%_ } -%>
+    </div>
+  </div>
+</div>
+<%- contentFor('title') %>
+Topics
