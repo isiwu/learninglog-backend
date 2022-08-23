@@ -92,7 +92,7 @@ create = (req, res, next) => {
   })
   .catch((error) => {
     if (error === 'username exists') req.flash('username', `${req.body.username} not available`);
-    req.flash('error', 'Request not successful. Try again later!');
+    else req.flash('error', 'Request not successful. Try again later!');
     res.locals.redirect = '/users/register';
     next();
   });

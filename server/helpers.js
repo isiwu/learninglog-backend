@@ -1,4 +1,5 @@
 import nodeMailer from 'nodemailer';
+import User from './models/user';
 
 const getData = (body) => {
   const data = {};
@@ -13,7 +14,6 @@ const getData = (body) => {
 
   return data;
 },
-
 sendMail = (req, subject, button, ...msg) => {
   const transporter = nodeMailer.createTransport({
     service: 'SendGrid',
@@ -52,6 +52,33 @@ sendMail = (req, subject, button, ...msg) => {
     console.log(`Unable to mail voter: ${error.message}`);
     return false;
   });
+},
+checkRequest = (req) => {
+  if (req.xhr) return true;
+  else return false;
+},
+genUniqueCode = async (length, userId) => {
+  let randomUniqueCode, currUser;
+
+  //ENSURE LENGTH
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    randomUniqueCode = Math.floor(Math.random() * Date.now());
+
+    if (randomUniqueCode.length >= length) break;
+  }
+
+  const uniqueCode = randomUniqueCode.slice(0, length);
+
+  //ENSURE CODE UNIQUENESS
+  try {
+    currUser = await User.findOne({_id: userId});
+  } catch (error) {
+    console.log(`Error fetching user info in genUniqueCode controller due to: ${error.message}`);
+  }
+
+  if (currUser.verifyCode === uniqueCode) genUniqueCode(length, userId);
+  else return uniqueCode;
 };
 
-export {getData, sendMail};
+export {getData, sendMail, checkRequest, genUniqueCode};
