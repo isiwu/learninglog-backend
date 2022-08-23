@@ -24,6 +24,8 @@ dotEnv.config();
 const app = express(),
 DB_URI = process.env.MONGODB_URI;
 
+console.log(process.env.COOKIE_SECRET);
+
 mongoose.connect(DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -48,11 +50,17 @@ store = new MongoDBStore({
     useUnifiedTopology: true,
   }
 }, error => {
-  console.log(`Error connecting to database for session model: ${error}`);
+  if (error) {
+    return console.log(`Error connecting to database for session model: ${error}`);
+  }
+
+  console.log("Session database connected!");
 });
 
+console.log(process.env.COOKIE_SECRET);
+
 const sessOptions = {
-  secret: process.env.COOKIE_SECRET,
+  secret: "mysecret",
   cookie: {secure: false},
   name: 'cookieName',
   resave: false,

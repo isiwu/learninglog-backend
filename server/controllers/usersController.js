@@ -9,14 +9,14 @@ import ForgetPasswordToken from "../models/forget-password";
 import Topic from "../models/topic";
 
 const index = (req, res, next) => {
-  const user = req.user;
-  if (!user) {
-    return next(new Error('Sorry, web page not available.'));
-  }
+  // const user = req.user;
+  // if (!user) {
+  //   return next(new Error('Sorry, web page not available.'));
+  // }
 
-  if (user && user.username !== process.env.ADMIN) {
-    return next(new Error('Sorry, web page not available'));
-  }
+  // if (user && user.username !== process.env.ADMIN) {
+  //   return next(new Error('Sorry, web page not available'));
+  // }
 
   User.find({}).populate('topics').exec()
   .then(users => {
@@ -597,10 +597,17 @@ validateUserInput = (req, res, next) => {
   }
 
   next();
+},
+respondJSON = (req, res) => {
+  console.log("!!");
+  res.status(200).json({
+    success: true,
+    data: res.locals
+  });
 };
 
 export {index, indexView, newUser, create, redirectView, account, show, 
   showView, profileEdit, uploadImage, showImage, edit, update, activate, 
   resendLinkForm, resendLink, login, logout, authenticate, forgetPasswordForm, 
   forgetPasswordToken, forgetPassword, resetPasswordForm, resetPassword, 
-  changePasswordForm, changePassword, deleteUser, validateUserInput};
+  changePasswordForm, changePassword, deleteUser, validateUserInput, respondJSON};
