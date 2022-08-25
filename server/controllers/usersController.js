@@ -2,7 +2,7 @@ import passport from "passport";
 import crypto from "crypto";
 import fs from 'fs';
 import {validationResult} from 'express-validator';
-import { getData, sendMail } from "../helpers";
+import { genUniqueCode, getData, isAPIRequest, sendMail } from "../helpers";
 import User from "../models/user";
 import VerifyToken from "../models/verify-token";
 import ForgetPasswordToken from "../models/forget-password";
@@ -35,6 +35,8 @@ newUser = (req, res) => {
   res.render('users/new');
 },
 create = (req, res, next) => {
+  const isAPI = isAPIRequest(req);
+
   if (req.hasErrors) return next();
 
   let newUser,
@@ -61,20 +63,29 @@ create = (req, res, next) => {
     });
   })
   .then(user => {
-    return VerifyToken.create({_id: user._id, token: crypto.randomBytes(16).toString('hex')});
+    if (!isAPI) return VerifyToken.create({_id: user._id, token: crypto.randomBytes(16).toString('hex')});
+    else return genUniqueCode(5);
   })
   .then(token => {
     //Sendmail parameters
-    const subject = 'Track Your Topic.',
-    button = `<a href='${req.protocol}://${req.headers.host}/users/activate/${token.token}' 
-    style='background-color: #008CBA;color: white;padding: 15px;text-decoration: none;
-    text-align: center;cursor: pointer;font-size: 18px;border: none;
-    border-radius: 4px;'>Confirm</a>`,
-    firstP = 'To complete your registration, we need to confirm your email address!',
-    secondP = 'Click the following button to confirm!';
+    if (!isAPI) {
+      const subject = 'Track Your Topic.',
+      button = `<a href='${req.protocol}://${req.headers.host}/users/activate/${token.token}' 
+      style='background-color: #008CBA;color: white;padding: 15px;text-decoration: none;
+      text-align: center;cursor: pointer;font-size: 18px;border: none;
+      border-radius: 4px;'>Confirm</a>`,
+      firstP = 'To complete your registration, we need to confirm your email address!',
+      secondP = 'Click the following button to confirm!';
 
-    //Send confirmation mail here
-    return sendMail(req, subject, button, firstP, secondP);
+      //Send confirmation mail here
+      return sendMail(req, subject, button, firstP, secondP);
+    } else {
+      const subject = "Learning Log.",
+      firstP = "Your email confirmation code is:",
+      secondP = token;
+
+      return sendMail(req, subject, null, firstP, secondP);
+    }
   })
   .then(mailSent => {
     if (!mailSent) { //Return Promise that reject
@@ -86,15 +97,23 @@ create = (req, res, next) => {
       });
     }
 
+    if (isAPI) {
+      res.locals.data = "";
+      return next();
+    }
+
     req.flash('success', 'Successful. Check your mail box to confirm your email!');
     res.locals.redirect = '/';
     next();
   })
   .catch((error) => {
+    if (isAPI) return next(error);
+
     if (error === 'username exists') req.flash('username', `${req.body.username} not available`);
     else req.flash('error', 'Request not successful. Try again later!');
     res.locals.redirect = '/users/register';
-    next();
+
+    next(error);
   });
 },
 redirectView = (req, res, next) => {
@@ -599,7 +618,7 @@ validateUserInput = (req, res, next) => {
   next();
 },
 respondJSON = (req, res) => {
-  console.log(req.xhr);
+  console.log(req.headers.xhr);
   console.log("!!");
   res.status(200).json({
     success: true,

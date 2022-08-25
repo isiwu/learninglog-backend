@@ -17,6 +17,32 @@ const getData = (body) => {
   return data;
 },
 sendMail = (req, subject, button, ...msg) => {
+  let html;
+
+  if (!req.headers.xhr) {
+    html = `<!DOCTYPE html>
+      <html>
+      <body style='background-color:#f0f0f0;'>
+      <div style='width:45%;margin:60px auto;background-color:#FFFFFF;padding: 40px'>
+        <h2 style='color: green;'>Hi,</h2>
+        <p style='font-size:24px; font-family:"Times New Roman", Times, serif;'>${msg[0]}</p>
+        <p style='font-size:24px; font-family:"Times New Roman", Times, serif;margin-bottom:20px;'>${msg[1]}</p>
+        ${button}
+      </div>
+      </body>
+      </html>`;
+  } else {
+    html = `<!DOCTYPE html>
+      <html>
+      <body style='background-color:#f0f0f0;'>
+      <div style='width:45%;margin:60px auto;background-color:#FFFFFF;padding: 40px'>
+        <h2 style='color: green;'>Hi,</h2>
+        <p style='font-size:24px; font-family:"Times New Roman", Times, serif;'>${msg[0]}</p>
+        <p style='font-size:24px; font-family:"Times New Roman", Times, serif;margin-bottom:20px;'>${msg[1]}</p>
+      </div>
+      </body>
+      </html>`;
+  }
   const transporter = nodeMailer.createTransport({
     service: 'SendGrid',
     auth: {
@@ -31,19 +57,8 @@ sendMail = (req, subject, button, ...msg) => {
   mail = {
   from: 'onyedikachiemmanuel86@gmail.com',
   to: req.body.email,
-  subject: subject,
-  html: `
-    <!DOCTYPE html>
-    <html>
-    <body style='background-color:#f0f0f0;'>
-    <div style='width:45%;margin:60px auto;background-color:#FFFFFF;padding: 40px'>
-      <h2 style='color: green;'>Hi,</h2>
-      <p style='font-size:24px; font-family:"Times New Roman", Times, serif;'>${msg[0]}</p>
-      <p style='font-size:24px; font-family:"Times New Roman", Times, serif;margin-bottom:20px;'>${msg[1]}</p>
-      ${button}
-    </div>
-    </body>
-    </html>`
+  subject,
+  html,
   };
 
   return transporter.sendMail(mail)
@@ -55,12 +70,12 @@ sendMail = (req, subject, button, ...msg) => {
     return false;
   });
 },
-checkRequest = (req) => {
-  if (req.xhr) return true;
+isAPIRequest = (req) => {
+  if (req.headers.xhr) return true;
   else return false;
 },
-genUniqueCode = async (length, userId) => {
-  let randomUniqueCode, currUser;
+genUniqueCode = async (length) => {
+  let randomUniqueCode, codeExists;
 
   //ENSURE LENGTH
   // eslint-disable-next-line no-constant-condition
@@ -74,13 +89,14 @@ genUniqueCode = async (length, userId) => {
 
   //ENSURE CODE UNIQUENESS
   try {
-    currUser = await User.findOne({_id: userId});
+    codeExists = await User.exists({verifyCode: uniqueCode});
+    console.log(codeExists);
   } catch (error) {
     console.log(`Error fetching user info in genUniqueCode controller due to: ${error.message}`);
   }
 
-  if (currUser.verifyCode === uniqueCode) genUniqueCode(length, userId);
+  if (codeExists) genUniqueCode(length);
   else return uniqueCode;
 };
 
-export {getData, sendMail, checkRequest, genUniqueCode};
+export {getData, sendMail, isAPIRequest, genUniqueCode};
