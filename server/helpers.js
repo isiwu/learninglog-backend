@@ -1,3 +1,5 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import nodeMailer from 'nodemailer';
 import User from './models/user';
 

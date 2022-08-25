@@ -599,6 +599,7 @@ validateUserInput = (req, res, next) => {
   next();
 },
 respondJSON = (req, res) => {
+  console.log(req.xhr);
   console.log("!!");
   res.status(200).json({
     success: true,
